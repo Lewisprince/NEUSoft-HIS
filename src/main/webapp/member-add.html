@@ -1,0 +1,180 @@
+<!--_meta 作为公共模版分离出去-->
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="gb2312">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<link rel="Bookmark" href="/favicon.ico" >
+<link rel="Shortcut Icon" href="/favicon.ico" />
+<!--[if lt IE 9]>
+<script type="text/javascript" src="lib/html5shiv.js"></script>
+<script type="text/javascript" src="lib/respond.min.js"></script>
+<![endif]-->
+<link rel="stylesheet" type="text/css" href="static/h-ui/css/H-ui.min.css" />
+<link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/H-ui.admin.css" />
+<link rel="stylesheet" type="text/css" href="lib/Hui-iconfont/1.0.8/iconfont.css" />
+<link rel="stylesheet" type="text/css" href="static/h-ui.admin/skin/default/skin.css" id="skin" />
+<link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/style.css" />
+
+	<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+<!--[if IE 6]>
+<script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+<!--/meta 作为公共模版分离出去-->
+
+<title>现场挂号</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+</head>
+<body>
+<script src="/plugins/_element-ui@2.10.1@element-ui/lib/input.js"></script>
+<article class="page-container" id = "app">
+	<form action="" method="post" class="form form-horizontal" id="form-member-add">
+		<div class="row cl">
+			<label ><h4><strong>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp挂号信息：</strong></h4></label>
+			<label class="form-label col-xs-11 col-sm-11"></label>
+		</div>
+		<div class="row cl">
+
+			<el-form :inline="true" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="150px" class="demo-ruleForm">
+				<el-form-item><table>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+					&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</table></el-form-item>
+				<el-form-item label="病历号：" prop="medical_history_number">
+						<el-input v-model="ruleForm.medical_history_number" placeholder="请输入内容" :required="true" @blur="autoFill()"></el-input>
+				</el-form-item>
+				<el-form-item label="姓名：" prop="name">
+						<el-input v-model="ruleForm.name" placeholder="请输入内容":required="true"></el-input>
+				</el-form-item>
+				<el-form-item label="性别：" prop="sex">
+						<el-select v-model="ruleForm.sex" placeholder="请选择">
+							<el-option
+									v-for="item in options1"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value">
+							</el-option>
+						</el-select>
+				</el-form-item>
+				<br/><br/>
+				<el-form-item><table>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+					&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</table></el-form-item>
+				<el-form-item label="身份证号：" prop="id_number">
+					<el-input v-model="ruleForm.id_number" placeholder="请输入内容":required="true"></el-input>
+				</el-form-item>
+				<el-form-item label="家庭住址：" prop="home_address">
+					<el-input v-model="ruleForm.home_address" placeholder="请输入内容":required="true"></el-input>
+				</el-form-item>
+				<el-form-item label="是否需要病历本：" prop="need_medical_book">
+					<el-select v-model="ruleForm.need_medical_book" placeholder="请选择">
+						<el-option
+								v-for="item in options2"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value">
+						</el-option>
+					</el-select>
+				</el-form-item>
+				<br/><br/>
+				<el-form-item><table>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+					&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</table></el-form-item>
+				<el-form-item label="挂号科室：" prop="office">
+					<el-select v-model="ruleForm.office" placeholder="请选择" @change="renewDoctor()">
+						<el-option
+								v-for="item in officeOptions"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value"
+								>
+						</el-option>
+					</el-select>
+				</el-form-item>
+				<el-form-item label="挂号类别：" prop="kind">
+					<el-select v-model="ruleForm.kind" placeholder="请选择" @change="renewDoctor()">
+						<el-option
+								v-for="item in kindOptions"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value"
+								>
+						</el-option>
+					</el-select>
+				</el-form-item>
+				<el-form-item label="挂号医生："  prop="doctor">
+					<el-select v-model="ruleForm.doctor" placeholder="请选择">
+						<el-option
+								v-for="item in doctorOptions"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value">
+						</el-option>
+					</el-select>
+				</el-form-item>
+				<br/><br/>
+				<el-form-item><table>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+					&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</table></el-form-item>
+				<el-form-item label="出生日期：" prop="birthday">
+					<el-date-picker
+							v-model="ruleForm.birthday"
+							type="date"
+							style="width:175px"
+							placeholder="选择日期"
+							v-on:change="calculateAge()">
+					</el-date-picker>
+				</el-form-item>
+				<el-form-item label="年龄：" prop="age">
+					<el-input
+							v-model="ruleForm.age"
+							:disabled="true">
+					</el-input>
+				</el-form-item>
+				<br/><br/>
+				<el-form-item><table>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+					&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+					&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</table></el-form-item>
+				<el-form-item><table>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+					&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+					&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</table></el-form-item>
+				<el-form-item><table>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+					&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</table></el-form-item>
+				<el-form-item>
+					<el-button type="primary" @click="submitForm('ruleForm')">挂号</el-button>
+				</el-form-item>
+				<el-form-item><table>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+					&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+					&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+					&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</table></el-form-item>
+				<el-form-item>
+					<el-button @click="resetForm('ruleForm')">清空</el-button>
+				</el-form-item>
+			</el-form>
+
+		</div>
+	</form>
+</article>
+
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script> 
+<script type="text/javascript" src="lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="static/h-ui/js/H-ui.min.js"></script> 
+<script type="text/javascript" src="static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本--> 
+<script type="text/javascript" src="lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="lib/jquery.validation/1.14.0/jquery.validate.js"></script> 
+<script type="text/javascript" src="lib/jquery.validation/1.14.0/validate-methods.js"></script> 
+<script type="text/javascript" src="lib/jquery.validation/1.14.0/messages_zh.js"></script>
+
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+<!-- import Vue before Element -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<!-- import JavaScript -->
+<script src="js/axios-0.18.0.js"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script charset="GB2312" content="text/script" src="js/member-add.js"></script>
+
+</html>

@@ -1,0 +1,652 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="gb2312">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<!--[if lt IE 9]>
+<script type="text/javascript" src="lib/html5shiv.js"></script>
+<script type="text/javascript" src="lib/respond.min.js"></script>
+<![endif]-->
+<link rel="stylesheet" type="text/css" href="static/h-ui/css/H-ui.min.css" />
+<link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/H-ui.admin.css" />
+<link rel="stylesheet" type="text/css" href="lib/Hui-iconfont/1.0.8/iconfont.css" />
+<link rel="stylesheet" type="text/css" href="static/h-ui.admin/skin/default/skin.css" id="skin" />
+<link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/style.css" />
+<link rel="stylesheet" href="lib/zTree/v3/css/zTreeStyle/zTreeStyle.css" type="text/css">
+	<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+<!--[if IE 6]>
+<script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+<title>医生诊疗</title>
+</head>
+<body >
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 门诊医生 <span class="c-gray en">&gt;</span> 门诊病历 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+
+<table class="table" id = "app">
+	<td>
+	<el-container>
+		<el-container>
+			<el-aside width="300px">
+
+					<el-row :gutter="20"><el-col :span="16">    <el-alert
+							title="待诊患者："
+							type="success"
+							:closable="false"
+							style="width: 300px">
+					</el-alert></el-col></el-row>
+					<template>
+						<el-table
+								ref="singleTable"
+								:data="waited"
+								height="440"
+								highlight-current-row
+								@current-change="handleCurrentChange"
+								style="width: 100%">
+							<el-table-column
+									prop="medicalNumber"
+									label="病历号"
+									width="100">
+							</el-table-column>
+							<el-table-column
+									prop="name"
+									label="姓名"
+									width="80">
+							</el-table-column>
+							<el-table-column
+									prop="registrationID"
+									label="挂号ID"
+									width="100">
+							</el-table-column>
+						</el-table>
+					</template>
+
+				<el-row :gutter="20"><el-col :span="16"> <br/><br/></el-col></el-row>
+					<el-row :gutter="20"><el-col :span="16">   <el-alert
+							title="已诊患者："
+							type="success"
+							:closable="false"
+							style="width: 300px">
+					</el-alert></el-col></el-row>
+				<template>
+					<el-table
+							ref="singleTable1"
+							:data="finished"
+							height="440"
+							highlight-current-row
+							@current-change="handleCurrentChange1"
+							style="width: 100%">
+						<el-table-column
+								prop="medicalNumber"
+								label="病历号"
+								width="100">
+						</el-table-column>
+						<el-table-column
+								prop="name"
+								label="姓名"
+								width="80">
+						</el-table-column>
+						<el-table-column
+								prop="registrationID"
+								label="挂号ID"
+								width="100">
+						</el-table-column>
+					</el-table>
+				</template>
+
+
+
+	</el-aside>
+			<el-container>
+				<el-main>
+	<el-tabs v-model="activeName" @tab-click="handleClick">
+		<el-tab-pane label="病历首页" name="first">
+
+
+
+			<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+				<el-form-item label="主诉：" prop="name">
+					<el-input
+							type="textarea"
+							:autosize="{ minRows: 2, maxRows: 4}"
+							placeholder="请输入内容"
+							v-model="ruleForm.mainClaim"
+							style="width:800px">
+					</el-input>
+				</el-form-item>
+				<el-form-item label="现病史：" prop="region">
+					<el-input
+							type="textarea"
+							:autosize="{ minRows: 2, maxRows: 4}"
+							placeholder="请输入内容"
+							v-model="ruleForm.currentDisease"
+							style="width:800px">
+					</el-input>
+				</el-form-item>
+
+
+				<el-form-item label="治疗情况：" prop="region">
+					<el-input
+							type="textarea"
+							:autosize="{ minRows: 2, maxRows: 4}"
+							placeholder="请输入内容"
+							v-model="ruleForm.treatment"
+							style="width:800px">
+					</el-input>
+				</el-form-item>
+
+				<el-form-item label="既往史：" prop="region">
+					<el-input
+							type="textarea"
+							:autosize="{ minRows: 2, maxRows: 4}"
+							placeholder="请输入内容"
+							v-model="ruleForm.diseaseHistory"
+							style="width:800px">
+					</el-input>
+				</el-form-item>
+
+				<el-form-item label="过敏史：" prop="region">
+
+					<el-input
+							type="textarea"
+							:autosize="{ minRows: 2, maxRows: 4}"
+							placeholder="请输入内容"
+							v-model="ruleForm.allergy"
+							style="width:800px">
+					</el-input>
+				</el-form-item>
+				<el-form-item label="体格检查：" prop="region">
+
+					<el-input
+							type="textarea"
+							:autosize="{ minRows: 2, maxRows: 4}"
+							placeholder="请输入内容"
+							v-model="ruleForm.bodyExam"
+							style="width:800px">
+					</el-input>
+				</el-form-item>
+				<el-form-item label="检查建议：" prop="region">
+
+					<el-input
+							type="textarea"
+							:autosize="{ minRows: 2, maxRows: 4}"
+							placeholder="请输入内容"
+							v-model="ruleForm.advice"
+							style="width:800px">
+					</el-input>
+				</el-form-item>
+
+				<el-form-item label="注意事项：" prop="region">
+
+					<el-input
+							type="textarea"
+							:autosize="{ minRows: 2, maxRows: 4}"
+							placeholder="请输入内容"
+							v-model="ruleForm.notice"
+							style="width:800px">
+					</el-input>
+				</el-form-item>
+
+
+				<el-form-item label="疾病诊断：" :required="true">
+				<el-select v-model="ruleForm.diseases" filterable multiple placeholder="请选择" style="width: 500px">
+					<el-option
+							v-for="item in diseaseOptions"
+							:key="item.value"
+							:label="item.label"
+							:value="item.value"
+							>
+					</el-option>
+				</el-select>
+				</el-form-item>
+
+				<el-form-item label="发病时间：" :required="true">
+					<el-date-picker
+							v-model="ruleForm.dateAndTime"
+							type="datetime"
+							placeholder="选择日期时间">
+					</el-date-picker>
+				</el-form-item>
+				<el-form-item>
+					<el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+					<label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+						&nbsp&nbsp&nbsp</label>
+
+					<el-button @click="resetForm('ruleForm')">重置</el-button>
+				</el-form-item>
+			</el-form>
+
+
+
+
+		</el-tab-pane>
+		<el-tab-pane label="检查申请" name="second">
+			<label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>检查申请：</label>
+			<el-input
+					type="textarea"
+					:autosize="{ minRows: 2, maxRows: 4}"
+					placeholder="请输入内容"
+					v-model="textarea1"
+					style="width:800px">
+			</el-input><br/><br/><br/>
+			<div class="row cl">
+				<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+					<label >
+						<button onClick="article_save_submit();" class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+					</label>
+					<label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+						&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
+					<label>
+						<button onClick="layer_close();"  class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+					</label>
+				</div>
+			</div>
+		</el-tab-pane>
+
+		<el-tab-pane label="检验申请" name="third">
+			<label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>检验申请：</label>
+			<el-input
+					type="textarea"
+					:autosize="{ minRows: 2, maxRows: 4}"
+					placeholder="请输入内容"
+					v-model="textarea1"
+					style="width:800px">
+			</el-input><br/><br/><br/>
+			<div class="row cl">
+				<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+					<label >
+						<button onClick="article_save_submit();" class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+					</label>
+					<label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+						&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
+					<label>
+						<button onClick="layer_close();"  class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+					</label>
+				</div>
+			</div>
+		</el-tab-pane>
+		<el-tab-pane label="门诊确诊" name="fourth">
+			<label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>门诊确诊：</label>
+			<el-input
+					type="textarea"
+					:autosize="{ minRows: 2, maxRows: 4}"
+					placeholder="请输入内容"
+					v-model="textarea1"
+					style="width:800px">
+			</el-input><br/><br/><br/>
+			<div class="row cl">
+				<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+					<label >
+						<button onClick="article_save_submit();" class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+					</label>
+					<label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+						&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
+					<label>
+						<button onClick="layer_close();"  class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+					</label>
+				</div>
+			</div>
+		</el-tab-pane>
+		<el-tab-pane label="处置申请" name="fifth">
+			<label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>处置申请：</label>
+			<el-input
+					type="textarea"
+					:autosize="{ minRows: 2, maxRows: 4}"
+					placeholder="请输入内容"
+					v-model="textarea1"
+					style="width:800px">
+			</el-input><br/><br/><br/>
+			<div class="row cl">
+				<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+					<label >
+						<button onClick="article_save_submit();" class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+					</label>
+					<label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+						&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
+					<label>
+						<button onClick="layer_close();"  class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+					</label>
+				</div>
+			</div>
+		</el-tab-pane>
+		<el-tab-pane label="成药处方" name="sixth">
+			<label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>成药处方：</label>
+			<div>
+				<label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
+				<el-link type="primary" icon="el-icon-circle-check" @click="submitDialogVisible = true">开立</el-link>
+				<label>&nbsp&nbsp&nbsp</label>
+				<el-link type="primary" icon="el-icon-delete" @click="deleteAll()">作废</el-link>
+				<label>&nbsp&nbsp&nbsp</label>
+				<el-link type="primary" icon="el-icon-circle-plus" @click="showAddDialog()">增药</el-link>
+
+			</div>
+			<template>
+				<el-table
+						ref="multipleTable"
+						:data="prescription"
+						tooltip-effect="dark"
+						style=" box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04) ;border-radius:4px"
+						border: true
+						@selection-change="handleSelectionChange">
+					<el-table-column
+							prop="number"
+							label="序号"
+							width="90">
+					</el-table-column>
+					<el-table-column
+							prop="medicine_name"
+							label="药品名称"
+							width="150">
+					</el-table-column>
+					<el-table-column
+							prop="method"
+							label="用法"
+							width="150">
+					</el-table-column>
+					<el-table-column
+							prop="use_amount"
+							label="用量"
+							width="150">
+					</el-table-column>
+					<el-table-column
+							prop="frequency"
+							label="频次"
+							width="150">
+					</el-table-column>
+					<el-table-column
+							prop="amount"
+							label="数量"
+							width="85">
+					</el-table-column>
+					<el-table-column
+							fixed="right"
+							label="操作"
+							width="100">
+						<template slot-scope="scope">
+							<el-button type="text" size="small" @click="handleEdit(scope.row)">编辑</el-button>
+							<el-button type="text" size="small" @click="open(scope.row)">删除</el-button>
+						</template>
+					</el-table-column>
+				</el-table>
+			</template>
+			<br/><br/>
+			<el-tabs type="border-card">
+				<el-tab-pane label="处方模板"></el-tab-pane>
+						<el-row >
+							<el-col :span="6.1"><div class="grid-content bg-purple" >
+
+								<el-row :gutter="20" >
+									<el-col :span="7"><div class="grid-content bg-purple">
+										<label>名称：</label>
+									</div></el-col>
+									<el-col :span="15"><div class="grid-content bg-purple">
+										<el-input v-model="input" placeholder="请输入模板名称"></el-input>
+									</div></el-col>
+								</el-row>
+								<br/>
+								<el-table
+										ref="singleTable"
+										:data="medicine_model"
+										highlight-current-row
+										@current-change="selectModel"
+										max-height="380"
+										style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);border-radius:4px"
+								>
+									<el-table-column
+											property="name"
+											label="模板名称"
+											width="140">
+									</el-table-column>
+									<el-table-column
+											property="range"
+											label="范围"
+											width="120">
+									</el-table-column>
+
+								</el-table>
+
+							</div></el-col>
+							<el-col :span="16">
+								<el-row :gutter="60" >
+									<el-col :span="1">
+										<label>&nbsp</label>
+									</div></el-col>
+									<el-col :span="7">
+										<label>模板明细：</label>
+									</div></el-col>
+									<el-col :span="5">
+										<label>&nbsp</label>
+									</div></el-col>
+									<el-col :span="6">
+										<el-link type="primary" @click="useModel()">使用该模板</el-link>
+									</div></el-col>
+								</el-row>
+								<br/><br/>
+
+
+								<el-table
+										:data="model_detail"
+										tooltip-effect="dark"
+										style=" box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);border-radius:4px">
+									<el-table-column
+											prop="medicine_name"
+											label="药品名称"
+											width="120">
+									</el-table-column>
+									<el-table-column
+											prop="method"
+											label="用法"
+											width="120">
+									</el-table-column>
+									<el-table-column
+											prop="use_amount"
+											label="用量"
+											width="120">
+									</el-table-column>
+									<el-table-column
+											prop="frequency"
+											label="频次"
+											width="120">
+									</el-table-column>
+									<el-table-column
+											prop="amount"
+											label="数量"
+											width="60">
+									</el-table-column>
+								</el-table>
+
+							</div></el-col>
+						</el-row>
+
+				<el-dialog
+						title="请修改药品信息"
+						:visible.sync="centerDialogVisible"
+						width="30%"
+						center>
+					药品名称：<el-input v-model="name_edit" placeholder="请输入内容"  :disabled="true"></el-input><br/>
+					用法：<el-input v-model="method_edit" placeholder="请输入内容"></el-input><br/>
+					用量：<el-input v-model="use_amount_edit" placeholder="请输入内容"></el-input><br/>
+					频次：<el-input v-model="frequency_edit" placeholder="请输入内容"></el-input><br/>
+					数量：<el-input v-model="amount_edit" placeholder="请输入内容"></el-input><br/>
+					<span slot="footer" class="dialog-footer">
+						<el-button @click="centerDialogVisible = false">取 消</el-button>
+   					 <el-button type="primary" @click="editTable()">确 定</el-button>
+  					</span>
+				</el-dialog>
+
+
+				<el-dialog
+						title="增药"
+						:visible.sync="addDialogVisible"
+						width="30%"
+						center>
+					<el-form :model="ruleForm123" :rules="rules123" ref="ruleForm123" label-width="100px" class="demo-ruleForm">
+						<el-form-item label="药品名称" prop="name">
+							<el-select v-model="ruleForm123.name" placeholder="请选择药品">
+								<el-option
+										v-for="item in medicines"
+										:key="item.value"
+										:label="item.value"
+										:value="item.value">
+								</el-option>
+							</el-select>
+						</el-form-item>
+						<el-form-item label="用法" prop="method">
+							<el-input v-model="ruleForm123.method"></el-input>
+						</el-form-item>
+						<el-form-item label="用量" prop="use_amount">
+							<el-input v-model="ruleForm123.use_amount"></el-input>
+						</el-form-item>
+						<el-form-item label="频次" prop="frequency">
+							<el-input v-model="ruleForm123.frequency"></el-input>
+						</el-form-item>
+						<el-form-item label="数量" prop="amount">
+							<el-input v-model="ruleForm123.amount"></el-input>
+						</el-form-item>
+
+					</el-form>
+					<span slot="footer" class="dialog-footer">
+ 						   <el-button type="primary" @click="submitForm123('ruleForm')">立即创建</el-button>
+							<el-button @click="resetForm123('ruleForm')">重置</el-button>
+						</span>
+				</el-dialog>
+
+
+				<el-dialog
+						title="提示"
+						:visible.sync="submitDialogVisible"
+						width="30%"
+						center>
+					请输入处方名称：<el-input v-model="prescriptionName" placeholder="请输入内容"></el-input>
+					<span slot="footer" class="dialog-footer">
+    				<el-button @click="submitDialogVisible = false">取 消</el-button>
+  					  <el-button type="primary" @click="submitPrescription()">确 定</el-button>
+  					</span>
+				</el-dialog>
+
+
+				<el-tab-pane label="常用药品">常用药品</el-tab-pane>
+				<el-tab-pane label="建议方案">建议方案</el-tab-pane>
+				<el-tab-pane label="历史处方">历史处方</el-tab-pane>
+			</el-tabs>
+		</el-tab-pane>
+		<el-tab-pane label="草药处方" name="seventh">
+			<label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>草药处方：</label>
+			<el-input
+					type="textarea"
+					:autosize="{ minRows: 2, maxRows: 4}"
+					placeholder="请输入内容"
+					v-model="textarea1"
+					style="width:800px">
+			</el-input><br/><br/><br/>
+			<div class="row cl">
+				<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+					<label >
+						<button onClick="article_save_submit();" class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+					</label>
+					<label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+						&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
+					<label>
+						<button onClick="layer_close();"  class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+					</label>
+				</div>
+			</div>
+		</el-tab-pane>
+		<el-tab-pane label="费用查询" name="eighth">
+			<label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>费用查询：</label>
+			<el-input
+					type="textarea"
+					:autosize="{ minRows: 2, maxRows: 4}"
+					placeholder="请输入内容"
+					v-model="textarea1"
+					style="width:800px">
+			</el-input><br/><br/><br/>
+			<div class="row cl">
+				<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+					<label >
+						<button onClick="article_save_submit();" class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+					</label>
+					<label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+						&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
+					<label>
+						<button onClick="layer_close();"  class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+					</label>
+				</div>
+			</div>
+		</el-tab-pane>
+	</el-tabs>
+</el-main>
+			</el-container>
+		</el-container>
+	</el-container>
+</td>
+</table>
+
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--使用ztree插件，也可以自行选择其他插件显示 -->
+<script type="text/javascript" src="lib/zTree/v3/js/jquery.ztree.all-3.5.min.js"></script>
+<script src="js/vuejs-2.5.16.js"></script>
+<script src="js/axios-0.18.0.js"></script>
+<script type="text/javascript">
+var setting = {
+	view: {
+		dblClickExpand: false,
+		showLine: false,
+		selectedMulti: false
+	},
+	data: {
+		simpleData: {
+			enable:true,
+			idKey: "id",
+			pIdKey: "pId",
+			rootPId: ""
+		}
+	},
+	callback: {
+		beforeClick: function(treeId, treeNode) {
+			var zTree = $.fn.zTree.getZTreeObj("tree");
+			if (treeNode.isParent) {
+				zTree.expandNode(treeNode);
+				return false;
+			} else {
+				demoIframe.attr("src",treeNode.file + ".html");
+				return true;
+			}
+		}
+	}
+};
+var code;
+		
+function showCode(str) {
+	if (!code) code = $("#code");
+	code.empty();
+	code.append("<li>"+str+"</li>");
+}
+		
+$(document).ready(function(){
+	var t = $("#treeDemo");
+	t = $.fn.zTree.init(t, setting, zNodes);
+	demoIframe = $("#testIframe");
+	//demoIframe.on("load", loadReady);
+	var zTree = $.fn.zTree.getZTreeObj("tree");
+	//zTree.selectNode(zTree.getNodeByParam("id",'11'));
+});
+</script>
+</body>
+<!-- import Vue before Element -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<!-- import JavaScript -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="https://cdn.bootcss.com/qs/6.5.1/qs.min.js"></script>
+<script charset="GB2312" content="text/script" src="js/doctor-category.js"></script>
+<script src="https://cdn.bootcss.com/qs/6.5.1/qs.min.js"></script>
+<script src="js/axios-0.18.0.js"></script>
+</html>

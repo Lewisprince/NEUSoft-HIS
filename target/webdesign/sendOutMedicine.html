@@ -1,0 +1,128 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="lib/html5shiv.js"></script>
+    <script type="text/javascript" src="lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="static/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="lib/Hui-iconfont/1.0.8/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="static/h-ui.admin/skin/default/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/style.css" />
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!--[if IE 6]>
+    <script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <title>列表</title>
+</head>
+<body >
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 登录 <span class="c-gray en">&gt;</span> 挂号收费员 <span class="c-gray en">&gt;</span> 发药 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container" id="app">
+
+    <el-row>
+        <el-col :span="4"><div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</div></el-col>
+        <el-col :span="4">病历号：<el-input v-model="medicalNum" placeholder="请输入病历号"></el-input></el-col>
+        <el-col :span="2.9"><div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</div></el-col>
+        <el-col :span="4">日期： <div class="block">
+                <el-date-picker
+                        v-model="value2"
+                        align="right"
+                        type="date"
+                        placeholder="选择日期"
+                        value-format="yyyy-MM-dd"
+                        :picker-options="pickerOptions">
+                </el-date-picker>
+            </div></el-col>
+        <el-col :span="1"><div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</div></el-col>
+        <el-col :span="4"><br/><el-col :span="8"><el-button type="primary" size="small" @click="logInfo()">查询</el-button></el-col></el-col>
+    </el-row>
+    <br/><br/>
+    <el-row>
+        <el-col :span="9"><div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</div></el-col>
+        <el-col :span="8"><el-button type="primary" @click="sendOutMedicine()">发药</el-button></el-col>
+        <el-col :span="8"><div class="grid-content bg-purple"></div></el-col>
+    </el-row>
+    <br/><br/>
+
+    <el-row>
+        <el-col :span="3"><div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</div></el-col>
+        <el-col :span="14.5"> <el-table
+                ref="multipleTable"
+                :data="tableData"
+                tooltip-effect="dark"
+                style="width: 100%"
+                max-height="390"
+                @selection-change="handleSelectionChange">
+            <el-table-column
+                    type="selection"
+                    width="55">
+            </el-table-column>
+            <el-table-column
+                    prop="name"
+                    label="药品名称"
+                    width="120">
+            </el-table-column>
+            <el-table-column
+                    prop="unit_price"
+                    label="单价"
+                    width="120">
+            </el-table-column>
+            <el-table-column
+                    prop="amount"
+                    label="数量"
+                    width="120">
+            </el-table-column>
+            <el-table-column
+                    prop="statement"
+                    label="药品状态"
+                    width="120">
+            </el-table-column>
+            <el-table-column
+                    prop="doctor"
+                    label="开立医生"
+                    width="120">
+            </el-table-column>
+            <el-table-column
+                    prop="prescriptionName"
+                    label="处方名称"
+                    width="120">
+            </el-table-column>
+            <el-table-column
+                    prop="time"
+                    label="开立时间"
+                    width="130">
+            </el-table-column>
+        </el-table></el-col>
+    </el-row>
+
+
+
+
+</div>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="lib/laypage/1.2/laypage.js"></script>
+<script src="js/vuejs-2.5.16.js"></script>
+<script src="js/axios-0.18.0.js"></script>
+
+</body>
+<!-- import Vue before Element -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<!-- import JavaScript -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="js/axios-0.18.0.js"></script>
+<script charset="GB2312" content="text/script" src="js/sendOutMedicine.js"></script>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- 页面meta -->
+    <meta http-equiv="Content-Type" content="text/html" charset="gb2312">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>挂号收费员</title>
+    <meta name="description" content="AdminLTE2定制版">
+    <meta name="keywords" content="AdminLTE2定制版">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+
+    <link rel="stylesheet" href="plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="plugins/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="plugins/iCheck/square/blue.css">
+    <link rel="stylesheet" href="plugins/morris/morris.css">
+    <link rel="stylesheet" href="plugins/bootstrap-markdown/css/bootstrap-markdown.min.css">
+    <link rel="stylesheet" href="plugins/adminLTE/css/AdminLTE.css">
+    <link rel="stylesheet" href="plugins/adminLTE/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="hold-transition skin-purple sidebar-mini">
+
+<div class="wrapper" id="app">
+
+    <!-- 页面头部 -->
+    <header class="main-header">
+        <!-- Logo -->
+        <a class="logo">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <span class="logo-mini"><b>挂号收费员</b></span>
+            <!-- logo for regular state and mobile devices -->
+            <span class="logo-lg"><b>挂号收费员</b>功能列表</span>
+        </a>
+
+
+        <!-- Header Navbar: style can be found in header.less -->
+        <nav class="navbar navbar-static-top">
+            <!-- Sidebar toggle button-->
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                <span class="sr-only">Toggle navigation</span>
+            </a>
+
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <!-- User Account: style can be found in dropdown.less -->
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="img/user.png" class="user-image" alt="User Image">
+                            <span class="hidden-xs">Serena</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <!-- User image -->
+                            <li class="user-header">
+                                <img src="img/user.png" class="img-circle" alt="User Image">
+
+                                <p>
+                                    {{user.realname}} - {{user.title}}
+                                    <small>最后登录 11:20AM</small>
+                                </p>
+                            </li>
+
+                            <!-- Menu Footer-->
+                            <li class="user-footer">
+                                <div class="pull-left">
+                                    <a href="#" class="btn btn-default btn-flat">修改密码</a>
+                                </div>
+                                <div class="pull-right">
+                                    <a href="#" class="btn btn-default btn-flat">注销</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <!-- 页面头部 /-->
+
+    <!-- 导航侧栏 -->
+    <aside class="main-sidebar">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+            <!-- Sidebar user panel -->
+            <div class="user-panel">
+                <div class="pull-left image">
+                    <img src="img/user.png" class="img-circle" alt="User Image">
+                </div>
+                <div class="pull-left info">
+                    <p>{{user.realname}}</p>
+                    <a href="#"><i class="fa fa-circle text-success"></i> 在线</a>
+                </div>
+            </div>
+            <!-- sidebar menu: : style can be found in sidebar.less -->
+            <ul class="sidebar-menu">
+                <li class="header">菜单</li>
+
+                <li id="admin-index"><a href="Login.html"><i class="fa fa-dashboard"></i> <span>返回首页</span></a>
+                </li>
+
+                <!-- 菜单 -->
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-folder"></i> <span>用户功能</span>
+                        <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                    </a>
+                    <ul class="treeview-menu">
+
+                        <li id="medical-history-number">
+                            <a v-on:click="show_registration" href="javascript:void(0)" >
+                                <i class="fa fa-circle-o"></i> 挂号
+                            </a>
+                        </li>
+                        <li id="giveBackNum">
+                            <a v-on:click="show_give_back" href="javascript:void(0)">
+                                <i class="fa fa-circle-o"></i> 退号
+                            </a>
+                        </li>
+                        <li id="non-medical-model">
+                            <a v-on:click="show_money_collect" href="javascript:void(0)">
+                                <i class="fa fa-circle-o"></i> 收费
+                            </a>
+                        </li>
+                        <li id="send_out_med">
+                            <a v-on:click="show_send_out_medicine" href="javascript:void(0)">
+                                <i class="fa fa-circle-o"></i> 发药
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+                <!-- 菜单 /-->
+            </ul>
+        </section>
+        <!-- /.sidebar -->
+    </aside>
+    <!-- 导航侧栏 /-->
+
+
+    <div class="content-wrapper">
+
+        <!-- 内容头部 -->
+        <section class="content-header">
+            <h1>
+                挂号收费员
+                <small>数据列表</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="Login.html"><i class="fa fa-dashboard"></i> 首页</a></li>
+                <li><a href="#">挂号收费员</a></li>
+            </ol>
+        </section>
+        <!-- 内容头部 /-->
+
+        <!-- 正文区域 -->
+        <section class="content">
+
+            <!-- .box-body -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">列表</h3>
+                </div>
+                <iframe id="url" runat="server" src="member-add.html" width="1250" height="850" frameborder="no" border="0"marginwidth="0" marginheight="0" scrolling="no"allowtransparency="yes"></iframe>
+            </div>
+            <!-- /.box-body -->
+        </section>
+    </div>
+    <!-- 正文区域 /-->
+</div>
+<!-- @@close -->
+<!-- 内容区域 /-->
+
+<script src="plugins/jQuery/jquery-2.2.3.min.js"></script>
+<script src="plugins/jQueryUI/jquery-ui.min.js"></script>
+<script src="plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="plugins/knob/jquery.knob.js"></script>
+<script src="plugins/adminLTE/js/app.min.js"></script>
+<script src="js/vuejs-2.5.16.js"></script>
+<script src="js/axios-0.18.0.js"></script>
+<script src="js/moneyCollector.js"></script>
+
+
+</body>
+
+</html>

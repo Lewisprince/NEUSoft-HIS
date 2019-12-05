@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="GB2312" content="text/html" content="text/html" http-equiv="Content-Type">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Login</title>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<body>
+
+<!-- 引入组件库 -->
+<script src="/plugins/_element-ui@2.10.1@element-ui/lib/input.js"></script>
+
+    <div class="login" id="app">
+        <div class="login-form">
+            <div class="login-header">
+                <h2>{{ siteName }}</h2>
+                <br/>
+            </div>
+
+            <el-input
+                    placeholder="请输入用户名"
+                    suffix-icon="fa fa-user"
+                    v-model="userName"
+                    style="margin-bottom: 18px"
+            >
+            </el-input>
+            <br/>
+            <el-input
+                    placeholder="请输入密码"
+                    suffix-icon="fa fa-keyboard-o"
+                    v-model="password"
+                    type="password"
+                    style="margin-bottom: 18px"
+            >
+            </el-input>
+
+            <br/>
+            <template>
+                <el-select v-model="value" placeholder="请选择登录类型">
+                    <el-option
+                            v-for="item in options"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                    </el-option>
+                </el-select>
+            </template>
+            <br/><br/>
+            <el-button v-on:click="Login"
+                       type="primary" :loading="loginLoading"
+                       style="width: 100%;margin-bottom: 18px"
+            >登录
+            </el-button>
+
+
+        </div>
+    </div>
+
+</body>
+
+<!-- import Vue before Element -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<!-- import JavaScript -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script charset="GB2312" content="text/script" src="js/Login.js"></script>
+<script src="js/axios-0.18.0.js"></script>
+
+
+</html>
+
+<style>
+    .login{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        background-image: url(111.jpg);
+        background-size: cover;
+        -webkit-background-size: cover;
+        -o-background-size: cover;
+        background-position: center 0;
+    }
+    .login-form{
+        width: 375px;
+        height: 400px;
+        padding: 30px;
+        background-color: white;
+        text-align: left;
+        border-radius: 4px;
+        position: relative;
+        margin-left: 0;
+        margin-right: 0;
+        zoom: 1;
+        display: block;
+        opacity: .8;
+    }
+    .login-header{
+        text-align: center;
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+</style>
